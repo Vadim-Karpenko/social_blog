@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+
+{% block title %}Log-in{% endblock %}
+
+
+{% block content %}
+    {% if request.user.is_authenticated %}
+        <h1>You already authenticated</h1>
+
+    {% else %}
+        <h1>Log-in</h1>
+        <p>Please, use the following form to log-in:</p>
+        <form action="." method="post" enctype="multipart/form-data">
+            {{ form.as_p }}
+            {% csrf_token %}
+            <p><input type="submit" value="Log-in"></p>
+        </form>
+    {% endif %}
+
+{% endblock %}
