@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from .models import Article, Comment
 from django.views.generic.edit import FormView
 from django.views.generic.detail import DetailView
