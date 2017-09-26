@@ -1,9 +1,21 @@
 {% extends "base.html" %}
+{% load thumbnail %}
 
 {% block title %}Find users{% endblock title %}
 
 {% block content %}
-    {% for user in object_list %}
-        <h3>{{ user.username }}</h3>
+    <form id="searchform" action="{% url 'user_list' %}" method="get" accept-charset="utf-8">
+        <input class="searchfield" id="searchbox" name="q" type="text" placeholder="Search">
+        <button class="searchbutton" type="submit">Search</button>
+    </form>
+    {% for user in object_list reversed %}
+        <div class="pa4">
+            {% thumbnail user.profile.photo "160x160" crop='100%' as im %}
+                <a href="{{ user.get_absolute_url }}">
+                    <img src="{{ im.url }}" class="profile_photo">
+                </a>
+            {% endthumbnail %}
+            <a href="{{ user.get_absolute_url }}">{% if user.get_full_name %}{{ user.get_full_name }}{% else %}{{ user.username }}{% endif %}</a>
+        </div>
     {% endfor %}
 {% endblock content %}

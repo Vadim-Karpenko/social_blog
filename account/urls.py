@@ -10,6 +10,6 @@ urlpatterns = [
 
     #user profiles urls
     url(r'^users/$', views.UserList.as_view(template_name='account/user/user_list.html'), name='user_list'),
-    #url(r'^users/follow/$', views.user_follow, name='user_follow'),
+    url(r'^users/follow/$', views.user_follow, name='user_follow'),
     url(r'^users/(?P<slug>[-\w.]+)/$', views.UserDetail.as_view(template_name='account/user/user_detail.html'), name='user_detail'),
 ]

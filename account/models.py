@@ -6,7 +6,7 @@ from sorl.thumbnail import ImageField
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL)
     date_of_birth = models.DateField('Your date of birth (YYYY-MM-DD)', blank=True, null=True)
-    photo = ImageField('', upload_to='users/%Y/%m/%d', default='users/default-photo.jpg')
+    photo = ImageField(upload_to='users/%Y/%m/%d', default='users/default-photo.jpg')
 
     def __str__(self):
         return 'Profile for user {}'.format(self.user.username)
