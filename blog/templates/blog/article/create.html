@@ -3,9 +3,14 @@
 {% block title %}Create article{% endblock title %}
 
 {% block content %}
-    <form action="." method="post" enctype="multipart/form-data">
-        {{ form.as_p }}
-        {% csrf_token %}
-        <p><input type="submit" value="Publish!"></p>
-    </form>
+    {% if request.user.is_authenticated %}
+        <form action="." method="post" enctype="multipart/form-data">
+            {{ form.as_p }}
+            {% csrf_token %}
+            <p><input type="submit" value="Publish!"></p>
+        </form>
+    {% else %}
+        <h2>You not logged in.</h2>
+    {% endif %}
+
 {% endblock content %}

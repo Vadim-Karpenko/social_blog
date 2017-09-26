@@ -5,6 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .forms import LoginForm
 from django.views.generic.edit import FormView
+from django.views.generic.detail import DetailView
+from django.views.generic.list import ListView
 from django.contrib.auth import authenticate, login
 
 class User_login(FormView):
@@ -23,3 +25,10 @@ class User_login(FormView):
         else:
             messages.error(request, 'Invalid login')
         return super(User_login, self).form_valid(form)
+
+class UserDetail(DetailView):
+    model = User
+    slug_field = 'username'
+
+class UserList(ListView):
+    model = User

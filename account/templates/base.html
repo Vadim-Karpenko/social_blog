@@ -6,15 +6,34 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>{% block title %}{% endblock title %}</title>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tachyons/4.8.1/tachyons.min.css" integrity="sha256-i0Y6JXo6ZVDJM7TUXTNTB2KKeO4TFQOfMTGgm9mW0II=" crossorigin="anonymous" />
   <body>
-    {% if request.user.is_authenticated %}
-                Hello {{ request.user.username }}, <ahref="{% url "logout" %}">Logout</a>
-            {% else %}
-                    <a href="{% url "login" %}">Log-in</a>
-            {% endif %}
-    {% block content %}
+    <nav class='fl w-100'>
+      <ul class='dib fl'>
+        <li class='dib'>Site Brand</li>
+        {% if request.user.is_authenticated %}
+          <li class='dib'><a href="{{ request.user.get_absolute_url }}">My profile</a></li>
+          <li class='dib'><a href="{% url 'list_view' %}">News</a></li>
+          <li class='dib'><a href="{% url 'user_list' %}">People</a></li>
+        {% endif %}
 
-    {% endblock content %}
+      </ul>
+
+      <div class="fr pa3 ph4">
+        {% if request.user.is_authenticated %}
+            Hello {{ request.user.username }}, <a href="{% url "logout" %}?next=/">Logout</a>
+        {% else %}
+            <a href="{% url "login" %}">Log-in</a>
+        {% endif %}
+      </div>
+    </nav>
+
+    <div class="fl w-100">
+      {% block content %}
+
+      {% endblock content %}
+    </div>
+
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 </html>
