@@ -18,5 +18,7 @@ How to install:
 8. create your superuser - python manage.py createsuperuser
 9. Excelent! Hard work is done. Run your server - python manage.py runserver, and open any web browser you like.
 10. Go to 127.0.0.1:8000 in your browser, and login using your superuser account.
-11. Open 127.0.0.1:8000/admin and search here "Profiles", and create this for your superuser (Select your nickname, enter date of birth, and choose any image you like)
+11. Open 127.0.0.1:8000/admin and search here for "Users", and fill on bottom page for your superuser (Select your nickname, enter date of birth, and choose any image you like)
 12. DONE, you're great.
+
+
