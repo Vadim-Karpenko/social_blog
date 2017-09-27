@@ -14,26 +14,35 @@ from django.http import JsonResponse
 from django.db.models import Q
 import operator
 from functools import reduce
+from django.contrib import messages
 
 class User_login(FormView):
     template_name = 'account/login.html'
     form_class = LoginForm
 
     def form_valid(self, form):
+        # Get clean data from form
         cd = form.cleaned_data
+        # set authenticate to user
         user = authenticate(username=cd['username'], password=cd['password'])
+        # Check is username and password is correct
         if user is not None:
+            # If user is active
             if user.is_active:
+                # Login using user variable
                 login(self.request, user)
+                # Redirect to main page
                 return redirect('/')
             else:
                 messages.error(request, 'Disabled account')
         else:
             messages.error(request, 'Invalid login')
+
         return super(User_login, self).form_valid(form)
 
 class UserDetail(DetailView):
     model = User
+    # slug field will use our username field
     slug_field = 'username'
 
 class UserList(ListView):
@@ -64,15 +73,20 @@ class UserList(ListView):
 @require_POST
 @login_required
 def user_follow(request):
-    user_username = request.POST.get('id')
+    # Get username
+    user_username = request.POST.get('username')
     action = request.POST.get('action')
+    # if is not None
     if user_username and action:
         try:
             user = get_object_or_404(User, username=user_username)
+            # if user return action equal 'follow'
             if action == 'follow':
+                # added to followers
                 Contact.objects.get_or_create(user_from=request.user,
                                               user_to=user)
             else:
+                #deleted form followers
                 Contact.objects.filter(user_from=request.user,
                                        user_to=user).delete()
             return JsonResponse({'status':'ok'})

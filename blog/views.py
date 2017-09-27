@@ -16,24 +16,37 @@ from django.core.mail import send_mail
 
 
 
-class Article_create(FormView):
+class Article_create(LoginRequiredMixin, FormView):
     template_name = 'blog/article/create.html'
     form_class = ArticleCreateForm
+    # if article successfully created, redirect ot main page
     success_url = '/'
-    login_required = True
+    login_url = '/login/'
 
     def form_valid(self, form):
+        # get cleaned data from form
         cd = form.cleaned_data
+        # create object, but don't save to database yet
         new_item = form.save(commit=False)
+        # author equal you
         new_item.user = self.request.user
+        # save to database
         new_item.save()
+        # empty list
         emails = []
+        # get your followers ids
         your_follower_ids =  self.request.user.following.values_list('id', flat=True)
+        # get Users by your followers ids
         your_followers = User.objects.filter(id__in=your_follower_ids)
+        # if you have followers
         if your_followers:
+            # typical for
             for user in your_followers:
+                # if user have an email
                 if user.email:
+                    # push to list
                     emails.append(user.email)
+        # send an emails
         send_mail('New article was recently published!', ('User ' + str(self.request.user) + ' published new article! Check this in your news page!'), 'rellay2.worker@gmail.com',     emails, fail_silently=False)
         return super(Article_create, self).form_valid(form)
 
@@ -66,17 +79,24 @@ class ListView(LoginRequiredMixin, ListView):
         context['followers_articles'] = get_followers_news()
         return context
 
+# Sorry for not class-based view :)
 @ajax_required
 @require_POST
 @login_required
 def user_watch(request):
+    # Get data from ajax
     article = request.POST.get('id')
     action = request.POST.get('action')
+    # If data from ajax is not Null
     if article and action:
+        # get object
         article = get_object_or_404(Article, id=article)
+        # if action from ajax equal "saw"
         if action == 'saw':
+            # add to this article your view
             article.users_view.add(request.user)
         else:
+            # remove your view from article
             article.users_view.remove(request.user)
         return JsonResponse({'status':'ok'})
     return JsonResponse({'status':'ko'})

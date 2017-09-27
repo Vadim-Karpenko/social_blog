@@ -26,7 +26,7 @@
 
     {% endfor %}
     {% if user != request.user %}
-        <a href="#" data-id="{{ user.username }}" data-action="{% if request.user in user.followers.all %}un{% endif %}follow" class="follow button">
+        <a href="#" data-username="{{ user.username }}" data-action="{% if request.user in user.followers.all %}un{% endif %}follow" class="follow button">
             {% if request.user not in user.followers.all %}
                 Follow
             {% else %}
@@ -41,7 +41,7 @@
         e.preventDefault();
         $.post('{% url "user_follow" %}',
             {
-                id: $(this).data('id'),
+                username: $(this).data('username'),
                 action: $(this).data('action')
             },
             function(data){
