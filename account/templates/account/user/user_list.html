@@ -4,18 +4,21 @@
 {% block title %}Find users{% endblock title %}
 
 {% block content %}
+<div class="tc">
     <form id="searchform" action="{% url 'user_list' %}" method="get" accept-charset="utf-8">
         <input class="searchfield" id="searchbox" name="q" type="text" placeholder="Search">
         <button class="searchbutton" type="submit">Search</button>
     </form>
     {% for user in object_list reversed %}
-        <div class="pa4">
-            {% thumbnail user.profile.photo "160x160" crop='100%' as im %}
-                <a href="{{ user.get_absolute_url }}">
+        <div class="pa4 dib f5-ns b ma1 link b black db bg-animate hover-bg-light-gray br2">
+            <a href="{{ user.get_absolute_url }}">
+                {% thumbnail user.profile.photo "160x160" crop='100%' as im %}
                     <img src="{{ im.url }}" class="profile_photo">
-                </a>
-            {% endthumbnail %}
-            <a href="{{ user.get_absolute_url }}">{% if user.get_full_name %}{{ user.get_full_name }}{% else %}{{ user.username }}{% endif %}</a>
+                {% endthumbnail %}
+                <p>{{ user.username }}</p>
+            </a>
         </div>
     {% endfor %}
+</div>
+
 {% endblock content %}

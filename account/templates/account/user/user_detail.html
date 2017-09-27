@@ -1,11 +1,29 @@
 {% extends "base.html" %}
+{% load thumbnail %}
 
 {% block title %}{{ user.username }}{% endblock title %}
 
 {% block content %}
-    <h2>{{ user.username }}</h2>
-    {% for article in user.article_created.all %}
-        {{ article.title }}
+    <div class="mh2 profile-img pt1 pr2 dib fl">
+        <h2 class='tc'>{{ user.username }}</h2>
+        {% thumbnail user.profile.photo "1080" crop='100%' as im %}
+            <div class='' style="background: url({{ im.url }}) no-repeat center center; background-size:cover; height: 400px; width: 300px; "></div>
+        {% endthumbnail %}
+    </div>
+
+    {% if user == request.user %}
+    <div class="fr pa3 pt5">
+        <a href="{% url "create" %}">Create new article!</a>
+    </div>
+    {% endif %}
+    {% for article in user.article_created.all reversed %}
+        <a href="{{ article.get_absolute_url }}" class='dib f5-ns b db pa2 link b black pv2 db bg-animate hover-bg-light-gray br2'>
+            <ul class="list ph3 ph5-ns pv4">
+                <li class='tc mr2 f3'>{{ article.title }}</li>
+                <i>{{ article.created }}</i>
+            </ul>
+        </a>
+
     {% endfor %}
     {% if user != request.user %}
         <a href="#" data-id="{{ user.username }}" data-action="{% if request.user in user.followers.all %}un{% endif %}follow" class="follow button">
@@ -15,8 +33,6 @@
                 Unfollow
             {% endif %}
         </a>
-    {% else %}
-        <a href="{% url "create" %}">Create new article!</a>
     {% endif %}
 {% endblock content %}
 

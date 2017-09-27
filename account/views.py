@@ -42,7 +42,6 @@ class UserList(ListView):
     Display a Blog List page filtered by the search query.
     """
     model = User
-    paginate_by = 30
 
     def get_queryset(self):
         result = super(UserList, self).get_queryset()
